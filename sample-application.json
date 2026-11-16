@@ -1,0 +1,52 @@
+[
+{
+"application_number" : "APP-006",
+"permit_type": " Land Conversion Permit",
+"transaction type" : "Amendment",
+"applicant_name ": "DR.Robert Vance",
+"company_name " : "MediCare Health Ltd",
+"status" : "In process",
+"created_date" : "2026-10-12",
+"submitted_date" : "2026-10-14"
+},
+{
+  "application_number" : "APP-007",
+  "permit_type" : " Building & Land Use Permit",
+  "transaction type" : "New",
+  "application_name":"ELena Rostova ",
+  "company_name" : "MediCareHealth Ltd",
+  "status": "Approved",
+  "created_date": "2026-10-15",
+  "submitted_date": "2026-10-18"
+},
+  {
+    "application_number" : "APP-008",
+    "permit_type " : "Fire Safety Plan",
+    "transaction type " : "New",
+    "applicant_name ": "DR.Robert Vance",
+    "company_name " : "MediCare Health Ltd",
+    "status": "In process",
+    "created_date ": "2026-11-04",
+    "submitted_date": "2026-11-09"
+  },
+  {
+    "application_number": "APP-009",
+    "permit_type": "Fire Certificate",
+    "transaction type": "Renewal",
+    "applicant_name ": "DR.Robert Vance",
+    "company_name": "MediCare Health Ltd",
+    "status": "Rejected",
+    "created_date" : "2026-11-08",
+    "submitted_date" : "2026-11-09"
+  },
+  {
+    "application_number": "APP-010",
+    "permit_type": "Occupation Certificate",
+    "transaction type": "Renewal",
+    "applicant_name": "Marcus Throne",
+    "company_name ": "MediCare Health Ltd",
+    "status": "Draft",
+    "created_date": "2026-11-12",
+    "submitted_date" : "N/A"
+  }
+]
