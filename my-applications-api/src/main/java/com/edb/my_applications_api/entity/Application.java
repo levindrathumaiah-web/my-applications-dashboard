@@ -21,17 +21,21 @@ public class Application {
     @Column(name = "applicationNo")
     private String applicationNo;
 
-    @Column(name = "applicantId")
-    private Integer applicantId;
+    @ManyToOne
+    @JoinColumn(name = "applicantId")
+    private Applicant applicant;
 
-    @Column(name = "permitId")
-    private Integer permitId;
+    @ManyToOne
+    @JoinColumn(name = "permitId")
+    private Permit permit;
 
-    @Column(name = "transactionTypeId")
-    private Integer transactionTypeId;
+    @ManyToOne
+    @JoinColumn(name = "transactionTypeId")
+    private TransactionType transactionType;
 
-    @Column(name = "statusId")
-    private Integer statusId;
+    @ManyToOne
+    @JoinColumn(name = "statusId")
+    private Status status;
 
     @Column(name = "createdDate")
     private LocalDate createdDate;

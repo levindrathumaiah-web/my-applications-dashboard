@@ -1,22 +1,36 @@
 <h1>{{ title }}</h1>
 
+<p>Test1</p>
+<nav>
+  <nav>
+    <button (click)="selectedStatus = 'All'">All Applications</button>
+    <button (click)="selectedStatus = 'Approved'">Approved</button>
+    <button (click)="selectedStatus = 'In Process'">In Process</button>
+    <button (click)="selectedStatus = 'Submitted'">Submitted</button>
+    <button (click)="selectedStatus = 'Rejected'">Rejected</button>
+    <button (click)="selectedStatus = 'Draft'">Drafts</button>
+  </nav>
+
+  <hr>
+</nav>
+
 <table border="1">
   <thead>
   <tr>
     <th>Application No</th>
-    <th>Applicant ID</th>
-    <th>Permit ID</th>
-    <th>Status ID</th>
+    <th>Applicant Name</th>
+    <th>Permit</th>
+    <th>Status</th>
     <th>Created Date</th>
   </tr>
   </thead>
 
   <tbody>
-  <tr *ngFor="let app of applications">
+  <tr *ngFor="let app of filteredApplications()">
     <td>{{ app.applicationNo }}</td>
-    <td>{{ app.applicantId }}</td>
-    <td>{{ app.permitId }}</td>
-    <td>{{ app.statusId }}</td>
+    <td>{{ app.applicant?.applicantName }}</td>
+    <td>{{ app.permit?.permitName }}</td>
+    <td>{{ app.status?.statusName }}</td>
     <td>{{ app.createdDate }}</td>
   </tr>
   </tbody>
