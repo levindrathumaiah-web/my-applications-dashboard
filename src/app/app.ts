@@ -1,14 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {ApplicationService} from './services/application';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
+export class App implements OnInit {
   title = 'My Applications Dashboard';
 
-  applicantName = 'John Smith';
-  companyName = 'MediCare Health Ltd';
+  applications: any[] = [];
+
+  constructor(private applicationService: ApplicationService) {}
+
+  ngOnInit(): void {
+    this.applicationService.getApplications().subscribe((data) => {
+      this.applications = data;
+      console.log(data);
+    });
+  }
 }

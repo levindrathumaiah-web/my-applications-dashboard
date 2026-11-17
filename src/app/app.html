@@ -1,16 +1,23 @@
 <h1>{{ title }}</h1>
 
-<h2>Applicant</h2>
+<table border="1">
+  <thead>
+  <tr>
+    <th>Application No</th>
+    <th>Applicant ID</th>
+    <th>Permit ID</th>
+    <th>Status ID</th>
+    <th>Created Date</th>
+  </tr>
+  </thead>
 
-<p>Name: {{ applicantName }}</p>
-<p>Company: {{ companyName }}</p>
-
-<h2>Hospital Permit Journey</h2>
-
-<ul>
-  <li>✅ Land Conversion Permit</li>
-  <li>✅ Building & Land Use Permit</li>
-  <li>✅ Fire Safety Plan</li>
-  <li>⏳ Fire Certificate</li>
-  <li>📨 Occupation Certificate</li>
-</ul>
+  <tbody>
+  <tr *ngFor="let app of applications">
+    <td>{{ app.applicationNo }}</td>
+    <td>{{ app.applicantId }}</td>
+    <td>{{ app.permitId }}</td>
+    <td>{{ app.statusId }}</td>
+    <td>{{ app.createdDate }}</td>
+  </tr>
+  </tbody>
+</table>
