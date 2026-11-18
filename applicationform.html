@@ -1,0 +1,156 @@
+﻿<style>
+  :host {
+    display: block;
+    min-height: 100vh;
+    color: #29445c;
+    font-family: "Roboto", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  .page { min-height: 100vh; background: #f3f7fa; }
+  .top-header { height: 57px; background: #fff; border-bottom: 1px solid #e5ebef; }
+  .header-inner { max-width: 930px; height: 100%; margin: auto; display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 12px; color: #183d5a; font-size: 13px; font-weight: 650; }
+  .brand-mark { width: 38px; height: 42px; display: grid; place-items: center; color: #075783; font-size: 10px; font-weight: 700; border: 1px solid #d9e3e9; border-radius: 5px; }
+  .header-tools { display: flex; align-items: center; gap: 16px; font-size: 11px; }
+  .search-box { width: 176px; height: 29px; padding: 0 10px; display: flex; align-items: center; border: 1px solid #e1e8ed; border-radius: 6px; color: #8293a0; }
+  .search-box input { width: 100%; border: 0; outline: 0; padding-left: 8px; color: #29445c; font: inherit; }
+  .account { display: flex; align-items: center; gap: 9px; border-left: 1px solid #e6ebef; padding-left: 16px; }
+  .avatar { width: 27px; height: 27px; border-radius: 50%; background: #e8f4fa; color: #0871a6; display: grid; place-items: center; font-weight: 600; }
+  .account small { display: block; margin-top: 2px; color: #8192a1; font-size: 9px; }
+
+  .main-navigation { min-height: 32px; background: #064d73; }
+  .nav-inner { max-width: 930px; min-height: 32px; margin: auto; display: flex; align-items: stretch; gap: 8px; }
+  .nav-inner a { display: flex; align-items: center; padding: 0 12px; color: #fff; text-decoration: none; font-size: 10px; white-space: nowrap; }
+  .nav-inner a.active { background: #08709a; border-radius: 5px; }
+
+  .page-banner { min-height: 100px; padding: 15px 0 20px; background: #08618f; color: #fff; }
+  .banner-inner { max-width: 886px; margin: auto; }
+  .breadcrumb { margin-bottom: 7px; font-size: 8px; letter-spacing: 1px; opacity: .85; }
+  .page-banner h1 { margin: 0 0 6px; font-size: 21px; font-weight: 650; }
+  .page-banner p { margin: 0; color: #dcecf5; font-size: 10px; }
+
+  .tabs-bar { background: #fff; border-bottom: 1px solid #e6edf1; }
+  .tabs-inner { max-width: 886px; height: 40px; margin: auto; display: flex; gap: 4px; }
+  .tab { min-width: 90px; padding: 0 10px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #60778b; font-size: 10px; cursor: pointer; }
+  .tab.active { border-bottom-color: #00a3cf; color: #00669d; font-weight: 600; }
+
+  .content { max-width: 886px; margin: 17px auto 0; }
+  .table-card { overflow: hidden; background: #fff; border: 1px solid #e0e8ed; border-radius: 10px; }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; min-width: 700px; border-collapse: collapse; text-align: left; }
+  thead { background: #edf3f6; }
+  th { padding: 10px 13px; color: #506b80; font-size: 9px; font-weight: 600; }
+  td { padding: 9px 13px; border-bottom: 1px solid #edf1f4; color: #29445c; font-size: 9px; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .number { color: #0068a5; font-weight: 650; }
+  .permit, .status { display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 8px; }
+  .permit-work { background: #e5f3fa; color: #0870a6; }
+  .permit-occupation { background: #f0eafb; color: #7045a7; }
+  .permit-building { background: #eaf5e4; color: #46752d; }
+  .status-review { background: #e6f3fa; color: #0870a6; }
+  .status-submitted { background: #edf2f5; color: #526b7d; }
+  .status-required { background: #fff1d9; color: #986000; }
+  .status-issued { background: #eaf5e4; color: #46752d; }
+  .date { color: #71869a; }
+  .table-footer { padding: 7px 13px; color: #8294a2; font-size: 8px; }
+  .page-footer { max-width: 886px; margin: 14px auto 0; padding: 10px 0; display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid #e1e9ee; color: #8294a2; font-size: 8px; }
+  .page-footer a { color: #0870a6; text-decoration: none; }
+
+  @media (max-width: 940px) {
+    .header-inner, .nav-inner, .banner-inner, .tabs-inner, .content, .page-footer { margin-left: 18px; margin-right: 18px; }
+  }
+  @media (max-width: 620px) {
+    .header-inner { padding: 0 12px; }
+    .brand { font-size: 10px; gap: 7px; }
+    .brand-mark { width: 30px; height: 34px; }
+    .search-box { display: none; }
+    .nav-inner { overflow-x: auto; margin: 0; padding: 0 8px; }
+    .page-banner { padding-left: 0; padding-right: 0; }
+    .banner-inner, .tabs-inner, .content, .page-footer { margin-left: 12px; margin-right: 12px; }
+    .page-footer { flex-direction: column; }
+  }
+</style>
+
+<div class="page">
+  <header class="top-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-label="Mauritius logo">MR</div>
+        <span>Mauritius Business Licensing Platform</span>
+      </div>
+      <div class="header-tools">
+        <label class="search-box">
+          <span>Search</span>
+          <input type="search" aria-label="Search">
+        </label>
+        <div class="account">
+          <span class="avatar"></span>
+          <span><small>Your account</small></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="main-navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="#">Home</a>
+      <a href="#" class="active">Your Area</a>
+      <a href="#">Licensing</a>
+      <a href="#">Search Permits</a>
+      <a href="#">News</a>
+      <a href="#">FAQ's &amp; Notices</a>
+      <a href="#">Government Directory</a>
+    </div>
+  </nav>
+
+  <section class="page-banner">
+    <div class="banner-inner">
+      <div class="breadcrumb">YOUR AREA / APPLICATIONS</div>
+      <h1>My Applications</h1>
+      <p>View your applications and saved drafts.</p>
+    </div>
+  </section>
+
+  <div class="tabs-bar">
+    <div class="tabs-inner">
+      <button class="tab" type="button" [class.active]="activeTab === 'applications'" (click)="activeTab = 'applications'">Applications</button>
+      <button class="tab" type="button" [class.active]="activeTab === 'drafts'" (click)="activeTab = 'drafts'">Drafts</button>
+    </div>
+  </div>
+
+  <main class="content">
+    <section class="table-card" aria-label="Applications">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Number</th>
+              <th>Permit type</th>
+              <th>Transaction type</th>
+              <th>Applicant</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="number">APP-2026-0142</td><td><span class="permit permit-work">Work permit</span></td><td>New application</td><td>Thumaiah</td><td><span class="status status-review">Under review</span></td><td class="date">16 Nov 2026</td></tr>
+            <tr><td class="number">APP-2026-0138</td><td><span class="permit permit-occupation">Occupation permit</span></td><td>New application</td><td>Thumaiah</td><td><span class="status status-submitted">Submitted</span></td><td class="date">13 Nov 2026</td></tr>
+            <tr><td class="number">APP-2026-0131</td><td><span class="permit permit-building">Building and land use</span></td><td>New application</td><td>Thumaiah</td><td><span class="status status-required">Information required</span></td><td class="date">10 Nov 2026</td></tr>
+            <tr><td class="number">APP-2026-0127</td><td><span class="permit permit-work">Work permit</span></td><td>New application</td><td>Thumaiah</td><td><span class="status status-review">Under review</span></td><td class="date">06 Nov 2026</td></tr>
+            <tr><td class="number">APP-2026-0120</td><td><span class="permit permit-occupation">Occupation permit</span></td><td>New application</td><td>Thumaiah</td><td><span class="status status-review">Under review</span></td><td class="date">02 Nov 2026</td></tr>
+            <tr><td class="number">APP-2026-0116</td><td><span class="permit permit-building">Building and land use</span></td><td>New application</td><td>Thumaiah</td><td><span class="status status-submitted">Submitted</span></td><td class="date">29 Oct 2026</td></tr>
+            <tr><td class="number">APP-2026-0098</td><td><span class="permit permit-work">Work permit</span></td><td>New application</td><td>Thumaiah</td><td><span class="status status-issued">Issued</span></td><td class="date">15 Oct 2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer">7 applications</div>
+    </section>
+
+    <footer class="page-footer">
+      <span>Your account was last accessed on 13/11/2026 10:47.</span>
+      <a href="#">Need help? Visit Help Centre</a>
+    </footer>
+  </main>
+</div>
