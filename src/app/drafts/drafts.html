@@ -1,0 +1,32 @@
+<table border="1">
+  <thead>
+  <tr>
+    <th>Application1 No</th>
+    <th>Permit Type</th>
+    <th>Transaction Type</th>
+    <th>Applicant Name</th>
+    <th>Status</th>
+    <th>Created Date</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr *ngFor="let app of applications()">
+    <td>{{ app.applicationNo }}</td>
+    <td [ngClass]="{
+        'lcp': app.permit?.permitName === 'Land Conversion Permit',
+        'blup': app.permit?.permitName === 'Building and Land Use Permit',
+        'fsp': app.permit?.permitName === 'Fire Safety Plan',
+        'fire': app.permit?.permitName === 'Fire Certificate',
+        'occupation': app.permit?.permitName === 'Occupation Certificate'
+      }">
+      {{ app.permit?.permitName }}
+    </td>
+    <td>{{ app.transactionType?.transactionType }}</td>
+    <td>{{ app.applicant?.applicantName }}</td>
+    <td>{{ app.status?.statusName }}</td>
+    <td>{{ app.createdDate }}</td>
+  </tr>
+  </tbody>
+</table>
+
