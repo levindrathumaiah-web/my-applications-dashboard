@@ -19,6 +19,9 @@ public class Company {
   @Column(name = "companyName")
   private String companyName;
 
+  @Column(name = "brn")
+  private String brn;
+
   public Company() {
   }
 }

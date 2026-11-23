@@ -19,9 +19,13 @@ public class Applicant {
   @Column(name = "applicantName")
   private String applicantName;
 
-  @ManyToOne
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "companyId")
   private Company company;
+
+  @ManyToOne
+  @JoinColumn(name = "userId")
+  private User user;
 
   public Applicant() {
   }
