@@ -1,0 +1,32 @@
+<section class="hero">
+  <span class="breadcrumb">YOUR AREA / APPLICATIONS</span>
+  <h2>{{ isAdmin() ? 'All Applications' : 'My Applications' }}</h2>
+  <p>{{ isAdmin() ? 'Review all submitted permit applications.' : 'View your applications and saved drafts.' }}</p>
+</section>
+
+<nav class="sub-nav">
+  <a
+    routerLink="/my-applications/applications"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }">
+    {{ isAdmin() ? 'All Applications' : 'Applications' }} ({{ applicationsCount() }})
+  </a>
+
+  @if (!isAdmin()) {
+  <a
+    routerLink="/my-applications/drafts"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }">
+    Drafts ({{ draftsCount() }})
+  </a>
+
+  <a
+    routerLink="/my-applications/new"
+    routerLinkActive="active"
+    class="new-draft-btn">
+    New Draft
+  </a>
+  }
+</nav>
+
+<router-outlet></router-outlet>

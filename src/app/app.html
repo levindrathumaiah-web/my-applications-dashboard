@@ -1,12 +1,19 @@
-<h1>My Applications</h1>
+<header>
+  <div class="header-container">
+    <div class="logo-text">
+      Mauritius Business Licensing Platform
+      <small>Republic of Mauritius</small>
+    </div>
+  </div>
 
-<p>Test</p>
+  <nav>
+    <div class="nav-container">
+      <a routerLink="/my-applications" routerLinkActive="active">Applications</a>
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+    </div>
+  </nav>
+</header>
 
-<nav>
-  <button routerLink="/applications">Applications</button>
-  <button routerLink="/drafts">Drafts</button>
-</nav>
-
-<hr>
-
-<router-outlet></router-outlet>
+<main class="container">
+  <router-outlet></router-outlet>
+</main>

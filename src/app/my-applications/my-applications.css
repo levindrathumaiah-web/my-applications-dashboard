@@ -1,0 +1,83 @@
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  font-size: 21px;
+  font-weight: 650;
+  color: var(--dark);
+}
+
+.sub-nav {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.sub-nav a {
+  text-decoration: none;
+  color: var(--grey);
+  padding: 12px 17px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.sub-nav a:hover,
+.sub-nav a.active {
+  color: var(--primary);
+  background: var(--light-blue);
+  border-bottom: 3px solid var(--primary);
+}
+
+/* BLUE BANNER (REUSING HER .hero STYLE) */
+.hero {
+  background: linear-gradient(120deg, #104c80, #2186c7);
+  border-radius: 14px 14px 0 0;
+  padding: 40px 45px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border: 45px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  right: -80px;
+  top: -100px;
+}
+
+.hero .breadcrumb {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #cfe6fa;
+  margin-bottom: 10px;
+}
+
+.hero h2 {
+  font-size: 30px;
+  font-weight: 650;
+  margin-bottom: 8px;
+}
+
+.hero p {
+  font-size: 14px;
+  color: #e2f0fc;
+  margin: 0;
+}
