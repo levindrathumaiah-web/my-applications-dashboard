@@ -1,0 +1,198 @@
+<div class="auth-viewport">
+  <div class="auth-wrapper">
+    <div class="split-card">
+      <!-- LEFT COLUMN: EDB BRANDING & STEP CONTEXT -->
+      <div class="brand-column">
+        <div class="edb-badge" aria-label="EDB Mauritius">
+          <img src="edb-logo.png" alt="EDB Mauritius" class="brand-logo" />
+        </div>
+
+        <h1 class="brand-title">Welcome to EDB Mauritius Business Licensing Platform</h1>
+
+        <p class="brand-subtitle">
+          @if (frame() === 1) {
+          Create your account — enter your name to get started
+          } @else if (frame() === 2) {
+          Basic information — enter your birthday and gender
+          } @else {
+          Account security — set up your email and password
+          }
+        </p>
+
+        <div class="step-pills">
+          <span class="pill" [class.active]="frame() === 1" [class.done]="frame() > 1">1. Name</span>
+          <span class="pill" [class.active]="frame() === 2" [class.done]="frame() > 2">2. Details</span>
+          <span class="pill" [class.active]="frame() === 3">3. Account</span>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: ACTIVE FRAME FORM -->
+      <div class="form-column">
+        @if (errorMessage()) {
+        <div class="error-banner">{{ errorMessage() }}</div>
+        }
+
+        <!-- FRAME 1: FIRST & LAST NAME -->
+        @if (frame() === 1) {
+        <form class="step-form" (ngSubmit)="nextFromFrame1()">
+          <div class="fields-stack">
+            <div class="outlined-field">
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                [(ngModel)]="firstName"
+                placeholder=" "
+                required
+              />
+              <label for="firstName">First name</label>
+            </div>
+
+            <div class="outlined-field">
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                [(ngModel)]="lastName"
+                placeholder=" "
+                required
+              />
+              <label for="lastName">Last name</label>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <a routerLink="/login" class="link-btn">Sign in instead</a>
+            <button type="submit" class="pill-btn-primary">Next</button>
+          </div>
+        </form>
+        }
+
+        <!-- FRAME 2: BIRTHDAY & GENDER -->
+        @if (frame() === 2) {
+        <form class="step-form" (ngSubmit)="nextFromFrame2()">
+          <div class="fields-stack">
+            <div class="dob-row">
+              <div class="outlined-field">
+                <select id="birthMonth" name="birthMonth" [(ngModel)]="birthMonth" required>
+                  <option value="" disabled selected>Month</option>
+                  @for (m of months; track m.value) {
+                  <option [value]="m.value">{{ m.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="outlined-field">
+                <input
+                  id="birthDay"
+                  name="birthDay"
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="2"
+                  [(ngModel)]="birthDay"
+                  placeholder=" "
+                  required
+                />
+                <label for="birthDay">Day</label>
+              </div>
+
+              <div class="outlined-field">
+                <input
+                  id="birthYear"
+                  name="birthYear"
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="4"
+                  [(ngModel)]="birthYear"
+                  placeholder=" "
+                  required
+                />
+                <label for="birthYear">Year</label>
+              </div>
+            </div>
+
+            <div class="outlined-field">
+              <select id="gender" name="gender" [(ngModel)]="gender" required>
+                <option value="" disabled selected>Gender</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button type="button" class="pill-btn-text" (click)="previousFrame()">Back</button>
+            <button type="submit" class="pill-btn-primary">Next</button>
+          </div>
+        </form>
+        }
+
+        <!-- FRAME 3: EMAIL & PASSWORD -->
+        @if (frame() === 3) {
+        <form class="step-form" (ngSubmit)="submitRegistration()">
+          <div class="fields-stack compact">
+            <div class="outlined-field">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                [(ngModel)]="email"
+                placeholder=" "
+                required
+              />
+              <label for="email">Email address</label>
+            </div>
+
+            <div class="outlined-field">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                [(ngModel)]="password"
+                placeholder=" "
+                required
+              />
+              <label for="password">Password</label>
+            </div>
+
+            <div class="outlined-field">
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                [(ngModel)]="confirmPassword"
+                placeholder=" "
+                required
+              />
+              <label for="confirmPassword">Confirm password</label>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button
+              type="button"
+              class="pill-btn-text"
+              [disabled]="submitting()"
+              (click)="previousFrame()"
+            >
+              Back
+            </button>
+            <button type="submit" class="pill-btn-primary" [disabled]="submitting()">
+              {{ submitting() ? 'Creating...' : 'Create Account' }}
+            </button>
+          </div>
+        </form>
+        }
+      </div>
+    </div>
+
+    <!-- SUBTLE FOOTER BAR -->
+    <div class="auth-subfooter">
+      <span>Economic Development Board Mauritius</span>
+      <div class="footer-links">
+        <a routerLink="/login">Sign in</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,98 @@
+<div class="auth-viewport">
+  <div class="auth-wrapper">
+    <div class="split-card">
+      <!-- LEFT COLUMN: EDB BRANDING & CONTEXT -->
+      <div class="brand-column">
+        <div class="edb-badge" aria-label="EDB Mauritius">
+          <img src="edb-logo.png" alt="EDB Mauritius" class="brand-logo" />
+        </div>
+
+        <h1 class="brand-title">Welcome to EDB Mauritius Business Licensing Platform</h1>
+
+        <p class="brand-subtitle">
+          @if (authService.currentUser()) {
+          You are currently signed in. Log out below before signing in with another account.
+          } @else {
+          Sign in — use your registered EDB portal account to access your applications
+          }
+        </p>
+      </div>
+
+      <!-- RIGHT COLUMN: LOGIN FORM OR LOGGED-IN SESSION -->
+      <div class="form-column">
+        @if (authService.currentUser(); as user) {
+        <div class="step-form">
+          <div class="session-box">
+            <div class="session-row">
+              <span class="session-label">Full Name</span>
+              <span class="session-value">
+                  {{ user.firstName || user.applicantName || '' }} {{ user.lastName || '' }}
+                </span>
+            </div>
+            <div class="session-row">
+              <span class="session-label">Email</span>
+              <span class="session-value">{{ user.email }}</span>
+            </div>
+            <div class="session-row">
+              <span class="session-label">User ID</span>
+              <span class="session-value">#{{ user.userId }}</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <a routerLink="/my-applications" class="link-btn">Back to My Applications</a>
+            <button type="button" class="pill-btn-danger" (click)="onLogout()">Logout</button>
+          </div>
+        </div>
+        } @else {
+        @if (errorMessage()) {
+        <div class="error-banner">{{ errorMessage() }}</div>
+        }
+
+        <form class="step-form" (ngSubmit)="onSubmit()">
+          <div class="fields-stack">
+            <div class="outlined-field">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                [(ngModel)]="email"
+                placeholder=" "
+                required
+              />
+              <label for="email">Email address</label>
+            </div>
+
+            <div class="outlined-field">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                [(ngModel)]="password"
+                placeholder=" "
+                required
+              />
+              <label for="password">Password</label>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <a routerLink="/register" class="link-btn">Create account</a>
+            <button type="submit" class="pill-btn-primary" [disabled]="submitting()">
+              {{ submitting() ? 'Signing in...' : 'Sign in' }}
+            </button>
+          </div>
+        </form>
+        }
+      </div>
+    </div>
+
+    <!-- SUBTLE FOOTER BAR -->
+    <div class="auth-subfooter">
+      <span>Economic Development Board Mauritius</span>
+      <div class="footer-links">
+        <a routerLink="/register">Register</a>
+      </div>
+    </div>
+  </div>
+</div>
