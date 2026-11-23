@@ -1,0 +1,404 @@
+:host {
+  display: block;
+  color: #0b0c0c;
+  font-family: 'GDS Transport', arial, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.gov-form-shell {
+  max-width: 760px;
+  padding: 0.5rem 0 3rem;
+}
+
+/* TOP BAR & BACK LINK */
+.gov-top-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.gov-back-link,
+.gov-back-btn {
+  position: relative;
+  display: inline-block;
+  padding: 0 0 0 14px;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #0b0c0c;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.gov-back-link::before,
+.gov-back-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-left: 2px solid #0b0c0c;
+  border-bottom: 2px solid #0b0c0c;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.gov-back-link:focus,
+.gov-back-btn:focus {
+  outline: 3px solid transparent;
+  background-color: #ffdd00;
+  box-shadow: 0 -2px #ffdd00, 0 4px #0b0c0c;
+  text-decoration: none;
+}
+
+/* GOV.UK TAGS (AUTO-SAVE STATUS) */
+.gov-tag {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+}
+
+.gov-tag--grey {
+  background: #eeefef;
+  color: #383f43;
+}
+
+.gov-tag--blue {
+  background: #bbd4ea;
+  color: #0c2d4a;
+}
+
+.gov-tag--green {
+  background: #cce2d8;
+  color: #005a30;
+}
+
+.gov-tag--red {
+  background: #f4cdc6;
+  color: #942514;
+}
+
+/* ERROR SUMMARY */
+.gov-error-summary {
+  border: 5px solid #d4351c;
+  background: #ffffff;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.gov-error-summary:focus {
+  outline: 3px solid #ffdd00;
+}
+
+.gov-error-summary__title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 0 0.85rem;
+}
+
+.gov-error-summary__list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.gov-error-summary__list li {
+  margin-bottom: 0.4rem;
+}
+
+.gov-error-summary__list a {
+  color: #d4351c;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* HEADINGS & CAPTIONS */
+.gov-caption {
+  display: block;
+  font-size: 1.1rem;
+  color: #505a5f;
+  margin-bottom: 0.25rem;
+}
+
+.gov-heading-xl,
+.gov-fieldset__heading {
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 1.5rem;
+  color: #0b0c0c;
+}
+
+.gov-heading-m {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 1.75rem 0 1.25rem;
+  color: #0b0c0c;
+}
+
+.gov-section-break {
+  border: 0;
+  border-top: 1px solid #b1b4b6;
+  margin: 2rem 0;
+}
+
+/* SUMMARY LIST */
+.gov-summary-list {
+  margin: 0 0 2rem;
+  border-top: 1px solid #b1b4b6;
+}
+
+.gov-summary-list__row {
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #b1b4b6;
+  align-items: center;
+}
+
+.gov-summary-list__key {
+  font-weight: 700;
+  color: #0b0c0c;
+}
+
+.gov-summary-list__value {
+  margin: 0;
+  color: #0b0c0c;
+}
+
+.gov-link-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #1d70b8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.gov-link-btn:hover {
+  color: #003078;
+}
+
+/* FORM GROUPS, LABELS, HINTS */
+.gov-form-group {
+  margin-bottom: 1.65rem;
+}
+
+.gov-form-group--error {
+  border-left: 5px solid #d4351c;
+  padding-left: 1rem;
+}
+
+.gov-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.gov-label {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  color: #0b0c0c;
+}
+
+.gov-hint {
+  font-size: 0.98rem;
+  color: #505a5f;
+  margin-bottom: 0.6rem;
+  line-height: 1.4;
+}
+
+.gov-error-message {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #d4351c;
+  margin: 0 0 0.6rem;
+}
+
+/* INPUTS & SELECTS */
+.gov-input,
+.gov-select {
+  font-family: inherit;
+  font-size: 1.05rem;
+  height: 44px;
+  padding: 0.45rem 0.6rem;
+  border: 2px solid #0b0c0c;
+  border-radius: 0;
+  background-color: #ffffff;
+  color: #0b0c0c;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.gov-input--width-20 {
+  max-width: 44ex;
+}
+
+.gov-input--width-10 {
+  max-width: 24ex;
+}
+
+.gov-input--width-5 {
+  max-width: 12ex;
+}
+
+.gov-input:focus,
+.gov-select:focus {
+  outline: 3px solid #ffdd00;
+  outline-offset: 0;
+  box-shadow: inset 0 0 0 2px #0b0c0c;
+}
+
+.gov-form-group--error .gov-input {
+  border-color: #d4351c;
+}
+
+/* SUFFIX WRAPPER (sqm) */
+.gov-input__wrapper {
+  display: flex;
+  align-items: stretch;
+}
+
+.gov-input__suffix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  background-color: #f3f2f1;
+  border: 2px solid #0b0c0c;
+  border-left: 0;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* GOV.UK RADIOS & CHECKBOXES */
+.gov-radios {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+.gov-radios__item,
+.gov-checkboxes__item {
+  position: relative;
+  padding-left: 52px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.gov-radios__input,
+.gov-checkboxes__input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  accent-color: #0b0c0c;
+  cursor: pointer;
+}
+
+.gov-radios__label,
+.gov-checkboxes__label {
+  font-size: 1.05rem;
+  font-weight: 400;
+  cursor: pointer;
+  color: #0b0c0c;
+}
+
+.gov-inset-conditional {
+  border-left: 4px solid #b1b4b6;
+  margin-left: 18px;
+  padding-left: 1.4rem;
+  margin-bottom: 1.75rem;
+}
+
+/* GOV.UK BUTTONS */
+.gov-button-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+
+.gov-button {
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 0.65rem 1.25rem;
+  border: 2px solid transparent;
+  border-radius: 0;
+  color: #ffffff;
+  background-color: #00703c;
+  box-shadow: 0 2px 0 #002d18;
+  cursor: pointer;
+}
+
+.gov-button:hover:not(:disabled) {
+  background-color: #005a30;
+}
+
+.gov-button:focus {
+  border-color: #ffdd00;
+  outline: 3px solid transparent;
+  box-shadow: inset 0 0 0 1px #ffdd00;
+  background-color: #ffdd00;
+  color: #0b0c0c;
+}
+
+.gov-button--secondary {
+  background-color: #f3f2f1;
+  color: #0b0c0c;
+  box-shadow: 0 2px 0 #929191;
+}
+
+.gov-button--secondary:hover:not(:disabled) {
+  background-color: #dbdad9;
+}
+
+.gov-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.gov-link-cancel {
+  font-size: 1rem;
+  color: #1d70b8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .gov-heading-xl,
+  .gov-fieldset__heading {
+    font-size: 1.65rem;
+  }
+
+  .gov-summary-list__row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .gov-button {
+    width: 100%;
+    text-align: center;
+  }
+}
