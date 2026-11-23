@@ -1,0 +1,77 @@
+.lcp {
+  background-color: lightblue;
+}
+
+.blup {
+  background-color: lightgreen;
+}
+
+.fsp {
+  background-color: khaki;
+}
+
+.fire {
+  background-color: lightcoral;
+}
+
+.occupation {
+  background-color: plum;
+}
+.table-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+thead {
+  background: var(--light-blue);
+  color: var(--dark);
+}
+
+th, td {
+  padding: 14px 16px;
+  text-align: left;
+  border: 1px solid var(--border);
+}
+
+th {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+td a {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+  margin-right: 12px;
+}
+
+td a:hover {
+  text-decoration: underline;
+}
+
+td button {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+td button:hover {
+  background: #fecaca;
+}

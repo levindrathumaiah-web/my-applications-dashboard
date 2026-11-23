@@ -1,0 +1,185 @@
+<div class="view-container">
+  <div class="view-header">
+    <a routerLink="/my-applications/applications" class="back-btn">← Back to Applications</a>
+    <span class="readonly-badge">Read-Only View</span>
+  </div>
+
+  @if (notFound()) {
+  <div class="empty-card">
+    <h3>Application not found</h3>
+    <p>This application does not exist or does not belong to your account.</p>
+  </div>
+  } @else if (application(); as app) {
+  <div class="form-card">
+    <!-- Informative Header / Metadata Strip -->
+    <div class="card-top">
+      <div>
+        <div class="title-row">
+          <h2>Application #{{ app.applicationId || app.id }}</h2>
+          @if (app.permit?.permitCode || app.permit?.permitName) {
+          <span class="permit-tag">{{ app.permit?.permitCode || app.permit?.permitName }}</span>
+          }
+        </div>
+        <p class="subtitle">{{ app.permit?.permitName || 'Permit Application' }}</p>
+        <p class="meta-line">Created on {{ app.createdDate || '—' }}</p>
+      </div>
+      <span class="status-pill">{{ app.status?.statusName || 'Submitted' }}</span>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 1. Applicant Information -->
+    <h3 class="section-title">1. Applicant Information</h3>
+    <div class="form-grid">
+      <div class="field-group">
+        <label>Applicant Name</label>
+        <input type="text" [value]="app.applicant?.applicantName || '—'" disabled />
+      </div>
+
+      <div class="field-group">
+        <label>Applicant ID</label>
+        <input type="text" [value]="app.applicant?.applicantId || '—'" disabled />
+      </div>
+
+      <div class="field-group">
+        <label>Company Name</label>
+        <input type="text" [value]="app.applicant?.company?.companyName || '—'" disabled />
+      </div>
+
+      <div class="field-group">
+        <label>BRN</label>
+        <input type="text" [value]="app.applicant?.company?.brn || '—'" disabled />
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 2. Permit-Specific Details -->
+    @if (app.lcpDetails; as lcp) {
+    <h3 class="section-title">2. Land Conversion Permit (LCP) Details</h3>
+    <div class="form-grid">
+      <div class="field-group">
+        <label>Site / Plot Address</label>
+        <input type="text" [value]="lcp.siteAddress || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Title Deed / PIN Number</label>
+        <input type="text" [value]="lcp.titleDeedNumber || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Land Area (m²)</label>
+        <input type="text" [value]="lcp.landAreaSqm ?? '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Proposed Land Use</label>
+        <input type="text" [value]="lcp.proposedLandUse || '—'" disabled />
+      </div>
+    </div>
+    }
+
+    @if (app.blupDetails; as blup) {
+    <h3 class="section-title">2. Building and Land Use Permit (BLUP) Details</h3>
+    <div class="form-grid">
+      <div class="field-group">
+        <label>Site / Plot Address</label>
+        <input type="text" [value]="blup.siteAddress || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Local Authority / Council</label>
+        <input type="text" [value]="blup.localAuthority || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Development Category</label>
+        <input type="text" [value]="blup.developmentCategory || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Nature of Works</label>
+        <input type="text" [value]="blup.natureOfWorks || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Total Floor Area (m²)</label>
+        <input type="text" [value]="blup.floorAreaSqm ?? '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Number of Floors</label>
+        <input type="text" [value]="blup.numberOfFloors ?? '—'" disabled />
+      </div>
+    </div>
+    }
+
+    @if (app.fspDetails; as fsp) {
+    <h3 class="section-title">2. Fire Safety Plan (FSP) Details</h3>
+    <div class="form-grid">
+      <div class="field-group">
+        <label>Building Type</label>
+        <input type="text" [value]="fsp.buildingType || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Number of Floors</label>
+        <input type="text" [value]="fsp.numberOfFloors ?? '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Alarm System Type</label>
+        <input type="text" [value]="fsp.alarmSystemType || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Fire Safety Engineer</label>
+        <input type="text" [value]="fsp.fireEngineerName || '—'" disabled />
+      </div>
+    </div>
+    }
+
+    @if (app.fireDetails; as fire) {
+    <h3 class="section-title">2. Fire Certificate Details</h3>
+    <div class="form-grid">
+      <div class="field-group">
+        <label>Premises Address</label>
+        <input type="text" [value]="fire.premisesAddress || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Maximum Occupancy Load</label>
+        <input type="text" [value]="fire.occupancyLoad ?? '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Fire Extinguisher Count</label>
+        <input type="text" [value]="fire.extinguisherCount ?? '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Emergency Exits</label>
+        <input type="text" [value]="fire.emergencyExits ?? '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Sprinkler System Installed</label>
+        <input type="text" [value]="fire.hasSprinklerSystem ? 'Yes' : 'No'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Last Inspection Date</label>
+        <input type="text" [value]="fire.lastInspectionDate || '—'" disabled />
+      </div>
+    </div>
+    }
+
+    @if (app.occupationDetails; as occ) {
+    <h3 class="section-title">2. Occupation Certificate Details</h3>
+    <div class="form-grid">
+      <div class="field-group">
+        <label>BLUP Reference Number</label>
+        <input type="text" [value]="occ.blupReferenceNumber || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Construction Completion Date</label>
+        <input type="text" [value]="occ.completionDate || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Certified Architect / Engineer</label>
+        <input type="text" [value]="occ.certifiedArchitectName || '—'" disabled />
+      </div>
+      <div class="field-group">
+        <label>Intended Occupancy Type</label>
+        <input type="text" [value]="occ.intendedOccupancyType || '—'" disabled />
+      </div>
+    </div>
+    }
+  </div>
+  }
+</div>
