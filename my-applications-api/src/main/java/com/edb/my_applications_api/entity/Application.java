@@ -12,40 +12,53 @@ import java.time.LocalDate;
 @Setter
 public class Application {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic
-    @Column(name = "applicationId")
-    private Integer applicationId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Basic
+  @Column(name = "applicationId")
+  private Integer applicationId;
 
-    @Column(name = "applicationNo")
-    private String applicationNo;
+  @Column(name = "applicationNo")
+  private String applicationNo;
 
-    @ManyToOne
-    @JoinColumn(name = "applicantId")
-    private Applicant applicant;
+  @ManyToOne
+  @JoinColumn(name = "applicantId")
+  private Applicant applicant;
 
-    @ManyToOne
-    @JoinColumn(name = "permitId")
-    private Permit permit;
+  @ManyToOne
+  @JoinColumn(name = "permitId")
+  private Permit permit;
 
-    @ManyToOne
-    @JoinColumn(name = "transactionTypeId")
-    private TransactionType transactionType;
+  @ManyToOne
+  @JoinColumn(name = "transactionTypeId")
+  private TransactionType transactionType;
 
-    @ManyToOne
-    @JoinColumn(name = "statusId")
-    private Status status;
+  @ManyToOne
+  @JoinColumn(name = "statusId")
+  private Status status;
 
-    @Column(name = "createdDate")
-    private LocalDate createdDate;
+  @Column(name = "createdDate")
+  private LocalDate createdDate;
 
-    @Column(name = "submittedDate")
-    private LocalDate submittedDate;
+  @Column(name = "submittedDate")
+  private LocalDate submittedDate;
 
-    public Application() {
-    }
+  @OneToOne(mappedBy = "application", cascade = CascadeType.ALL)
+  private LcpDetails lcpDetails;
+
+  @OneToOne(mappedBy = "application", cascade = CascadeType.ALL)
+  private BlupDetails blupDetails;
+
+  @OneToOne(mappedBy = "application", cascade = CascadeType.ALL)
+  private FspDetails fspDetails;
+
+  @OneToOne(mappedBy = "application", cascade = CascadeType.ALL)
+  private FireDetails fireDetails;
+
+  @OneToOne(mappedBy = "application", cascade = CascadeType.ALL)
+  private OccupationDetails occupationDetails;
+
+  public Application() {
+  }
 }
-
-
 
