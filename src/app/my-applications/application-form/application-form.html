@@ -1,0 +1,671 @@
+<div class="gov-form-shell">
+  <!-- TOP UTILITY BAR: BACK LINK & AUTO-SAVE STATUS -->
+  <div class="gov-top-bar">
+    @if (step() === 1) {
+    <a routerLink="/my-applications/drafts" class="gov-back-link">Back to Drafts</a>
+    } @else if (step() === 2) {
+    <button type="button" class="gov-back-btn" (click)="errors.set([]); step.set(1)">Back</button>
+    } @else if (step() === 3) {
+    @if (editDraftId) {
+    <a routerLink="/my-applications/drafts" class="gov-back-link">Back to Drafts</a>
+    } @else {
+    <button type="button" class="gov-back-btn" (click)="errors.set([]); step.set(2)">Back</button>
+    }
+    } @else {
+    <button type="button" class="gov-back-btn" (click)="errors.set([]); step.set(3)">Back</button>
+    }
+
+    @if (step() === 3 || step() === 4) {
+    <div class="autosave-status" aria-live="polite">
+      @if (saveStatus() === 'saving') {
+      <span class="gov-tag gov-tag--blue">Saving draft...</span>
+      } @else if (saveStatus() === 'saved') {
+      <span class="gov-tag gov-tag--green">Auto-saved at {{ lastSavedAt() }}</span>
+      } @else if (saveStatus() === 'error') {
+      <span class="gov-tag gov-tag--red">Auto-save failed</span>
+      } @else {
+      <span class="gov-tag gov-tag--grey">Auto-save enabled</span>
+      }
+    </div>
+    }
+  </div>
+
+  <!-- GOV.UK ERROR SUMMARY -->
+  @if (errors().length > 0) {
+  <div
+    id="gov-error-summary"
+    class="gov-error-summary"
+    tabindex="-1"
+    role="alert"
+    aria-labelledby="gov-error-title"
+  >
+    <h2 id="gov-error-title" class="gov-error-summary__title">There is a problem</h2>
+    <ul class="gov-error-summary__list">
+      @for (err of errors(); track err.fieldId) {
+      <li>
+        <a [href]="'#' + err.fieldId">{{ err.message }}</a>
+      </li>
+      }
+    </ul>
+  </div>
+  }
+
+  <!-- STEP 1: PERMIT TYPE -->
+  @if (step() === 1) {
+  <div class="gov-step-container">
+    <span class="gov-caption">Step 1 of 4 — New Permit Application</span>
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('permit-0')">
+      <fieldset class="gov-fieldset">
+        <legend class="gov-fieldset__legend gov-fieldset__legend--xl">
+          <h1 class="gov-fieldset__heading">Which permit or licence do you need?</h1>
+        </legend>
+        <div class="gov-hint">Select one permit type to begin your application.</div>
+
+        @if (hasError('permit-0'); as msg) {
+        <p class="gov-error-message">{{ msg }}</p>
+        }
+
+        <div class="gov-radios">
+          @for (permit of permits(); track permit.permitId; let i = $index) {
+          <div class="gov-radios__item">
+            <input
+              class="gov-radios__input"
+              [id]="'permit-' + i"
+              name="permitType"
+              type="radio"
+              [value]="permit.permitId"
+              [(ngModel)]="selectedPermitId"
+            />
+            <label class="gov-radios__label" [for]="'permit-' + i">
+              {{ permit.permitName }}
+            </label>
+          </div>
+          }
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="gov-button-group">
+      <button type="button" class="gov-button" (click)="submitPermitStep()">Continue</button>
+      <a routerLink="/my-applications/drafts" class="gov-link-cancel">Cancel</a>
+    </div>
+  </div>
+  }
+
+  <!-- STEP 2: TRANSACTION TYPE -->
+  @if (step() === 2) {
+  <div class="gov-step-container">
+    <span class="gov-caption">Step 2 of 4 — {{ selectedPermit?.permitName }}</span>
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('tx-0')">
+      <fieldset class="gov-fieldset">
+        <legend class="gov-fieldset__legend gov-fieldset__legend--xl">
+          <h1 class="gov-fieldset__heading">What type of transaction is this?</h1>
+        </legend>
+        <div class="gov-hint">Choose whether this is a new application, renewal, or amendment.</div>
+
+        @if (hasError('tx-0'); as msg) {
+        <p class="gov-error-message">{{ msg }}</p>
+        }
+
+        <div class="gov-radios">
+          @for (tx of transactionTypes(); track tx.transactionTypeId; let i = $index) {
+          <div class="gov-radios__item">
+            <input
+              class="gov-radios__input"
+              [id]="'tx-' + i"
+              name="transactionType"
+              type="radio"
+              [value]="tx.transactionTypeId"
+              [(ngModel)]="selectedTransactionTypeId"
+            />
+            <label class="gov-radios__label" [for]="'tx-' + i">
+              {{ tx.transactionType }}
+            </label>
+          </div>
+          }
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="gov-button-group">
+      <button type="button" class="gov-button" (click)="submitTransactionStep()">Continue</button>
+    </div>
+  </div>
+  }
+
+  <!-- STEP 3: APPLICANT DETAILS FRAME -->
+  @if (step() === 3) {
+  <div class="gov-step-container">
+      <span class="gov-caption">
+        {{ editDraftId ? 'Draft Application #' + editDraftId + ' — Step 3 of 4' : 'Step 3 of 4 — ' + selectedPermit?.permitName }}
+      </span>
+    <h1 class="gov-heading-xl">Applicant details</h1>
+
+    <div class="gov-form-group">
+      <label class="gov-label" for="applicantSelect">Applicant profile</label>
+      <div class="gov-hint">Choose an existing profile or enter new applicant details.</div>
+      <select
+        class="gov-select gov-input--width-20"
+        id="applicantSelect"
+        [ngModel]="selectedApplicantId"
+        (ngModelChange)="onApplicantSelectionChange($event)"
+      >
+        <option [ngValue]="'NEW'">+ Add New Applicant</option>
+        @for (app of savedApplicants(); track app.applicantId) {
+        <option [ngValue]="app.applicantId">
+          {{ app.applicantName }} {{ app.company ? '(' + app.company.companyName + ')' : '' }}
+        </option>
+        }
+      </select>
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('applicantName')">
+      <label class="gov-label" for="applicantName">Applicant full name</label>
+      <div class="gov-hint">Enter the full legal name as shown on National Identity Card or Passport.</div>
+      @if (hasError('applicantName'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="applicantName"
+        type="text"
+        [(ngModel)]="applicantForm.applicantName"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group">
+      <div class="gov-checkboxes__item">
+        <input
+          class="gov-checkboxes__input"
+          id="isCompany"
+          type="checkbox"
+          [(ngModel)]="applicantForm.isCompany"
+          (ngModelChange)="onFieldChange()"
+        />
+        <label class="gov-checkboxes__label" for="isCompany">
+          Applying on behalf of a registered company
+        </label>
+      </div>
+    </div>
+
+    @if (applicantForm.isCompany) {
+    <div class="gov-inset-conditional">
+      <div class="gov-form-group" [class.gov-form-group--error]="hasError('companyName')">
+        <label class="gov-label" for="companyName">Company name</label>
+        @if (hasError('companyName'); as msg) {
+        <p class="gov-error-message">{{ msg }}</p>
+        }
+        <input
+          class="gov-input gov-input--width-20"
+          id="companyName"
+          type="text"
+          [(ngModel)]="applicantForm.companyName"
+          (ngModelChange)="onFieldChange()"
+        />
+      </div>
+
+      <div class="gov-form-group" [class.gov-form-group--error]="hasError('brn')">
+        <label class="gov-label" for="brn">Business Registration Number (BRN)</label>
+        <div class="gov-hint">For example, C21098765</div>
+        @if (hasError('brn'); as msg) {
+        <p class="gov-error-message">{{ msg }}</p>
+        }
+        <input
+          class="gov-input gov-input--width-10"
+          id="brn"
+          type="text"
+          [(ngModel)]="applicantForm.brn"
+          (ngModelChange)="onFieldChange()"
+        />
+      </div>
+    </div>
+    }
+
+    <div class="gov-button-group">
+      <button type="button" class="gov-button" (click)="submitApplicantStep()">
+        Continue to permit details
+      </button>
+
+      <button
+        type="button"
+        class="gov-button gov-button--secondary"
+        [disabled]="saving()"
+        (click)="saveApplication('Draft')"
+      >
+        Save as draft
+      </button>
+    </div>
+  </div>
+  }
+
+  <!-- STEP 4: PERMIT-SPECIFIC DETAILS FRAME -->
+  @if (step() === 4) {
+  <div class="gov-step-container">
+      <span class="gov-caption">
+        {{ editDraftId ? 'Draft Application #' + editDraftId + ' — Step 4 of 4' : 'Step 4 of 4' }}
+      </span>
+    <h1 class="gov-heading-xl">{{ selectedPermit?.permitName }} details</h1>
+
+    <!-- GOV.UK SUMMARY LIST FOR EARLIER STEPS -->
+    <dl class="gov-summary-list">
+      <div class="gov-summary-list__row">
+        <dt class="gov-summary-list__key">Permit type</dt>
+        <dd class="gov-summary-list__value">{{ selectedPermit?.permitName }}</dd>
+        @if (!editDraftId) {
+        <dd class="gov-summary-list__actions">
+          <button type="button" class="gov-link-btn" (click)="errors.set([]); step.set(1)">Change</button>
+        </dd>
+        }
+      </div>
+      <div class="gov-summary-list__row">
+        <dt class="gov-summary-list__key">Transaction type</dt>
+        <dd class="gov-summary-list__value">{{ selectedTransactionType?.transactionType }}</dd>
+        @if (!editDraftId) {
+        <dd class="gov-summary-list__actions">
+          <button type="button" class="gov-link-btn" (click)="errors.set([]); step.set(2)">Change</button>
+        </dd>
+        }
+      </div>
+      <div class="gov-summary-list__row">
+        <dt class="gov-summary-list__key">Applicant</dt>
+        <dd class="gov-summary-list__value">
+          {{ applicantForm.applicantName }}
+          @if (applicantForm.isCompany && applicantForm.companyName) {
+          — {{ applicantForm.companyName }} ({{ applicantForm.brn }})
+          }
+        </dd>
+        <dd class="gov-summary-list__actions">
+          <button type="button" class="gov-link-btn" (click)="errors.set([]); step.set(3)">Change</button>
+        </dd>
+      </div>
+    </dl>
+
+    <!-- 1. Land Conversion Permit (LCP) -->
+    @if (selectedPermit?.permitName === 'Land Conversion Permit') {
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('lcpSiteAddress')">
+      <label class="gov-label" for="lcpSiteAddress">Site address</label>
+      @if (hasError('lcpSiteAddress'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="lcpSiteAddress"
+        type="text"
+        [(ngModel)]="lcpDetails.siteAddress"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('lcpTitleDeed')">
+      <label class="gov-label" for="lcpTitleDeed">Title deed number</label>
+      <div class="gov-hint">Transcription volume and number from the deed of sale</div>
+      @if (hasError('lcpTitleDeed'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-10"
+        id="lcpTitleDeed"
+        type="text"
+        [(ngModel)]="lcpDetails.titleDeedNumber"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('lcpLandArea')">
+      <label class="gov-label" for="lcpLandArea">Land area</label>
+      @if (hasError('lcpLandArea'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <div class="gov-input__wrapper">
+        <input
+          class="gov-input gov-input--width-10"
+          id="lcpLandArea"
+          type="number"
+          step="0.01"
+          [(ngModel)]="lcpDetails.landAreaSqm"
+          (ngModelChange)="onFieldChange()"
+        />
+        <div class="gov-input__suffix" aria-hidden="true">sqm</div>
+      </div>
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('lcpLandUse')">
+      <label class="gov-label" for="lcpLandUse">Proposed land use</label>
+      <div class="gov-hint">For example, Commercial, Residential, or Industrial development</div>
+      @if (hasError('lcpLandUse'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="lcpLandUse"
+        type="text"
+        [(ngModel)]="lcpDetails.proposedLandUse"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+    }
+
+    <!-- 2. Building and Land Use Permit (BLUP) -->
+    @if (selectedPermit?.permitName === 'Building and Land Use Permit') {
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('blupSiteAddress')">
+      <label class="gov-label" for="blupSiteAddress">Site address</label>
+      @if (hasError('blupSiteAddress'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="blupSiteAddress"
+        type="text"
+        [(ngModel)]="blupDetails.siteAddress"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('blupLocalAuth')">
+      <label class="gov-label" for="blupLocalAuth">Local authority</label>
+      <div class="gov-hint">Municipal Council or District Council overseeing the site</div>
+      @if (hasError('blupLocalAuth'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="blupLocalAuth"
+        type="text"
+        [(ngModel)]="blupDetails.localAuthority"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('blupDevCat')">
+      <label class="gov-label" for="blupDevCat">Development category</label>
+      @if (hasError('blupDevCat'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="blupDevCat"
+        type="text"
+        [(ngModel)]="blupDetails.developmentCategory"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('blupWorks')">
+      <label class="gov-label" for="blupWorks">Nature of works</label>
+      <div class="gov-hint">For example, New construction, Extension, or Change of use</div>
+      @if (hasError('blupWorks'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="blupWorks"
+        type="text"
+        [(ngModel)]="blupDetails.natureOfWorks"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('blupFloorArea')">
+      <label class="gov-label" for="blupFloorArea">Floor area</label>
+      @if (hasError('blupFloorArea'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <div class="gov-input__wrapper">
+        <input
+          class="gov-input gov-input--width-10"
+          id="blupFloorArea"
+          type="number"
+          step="0.01"
+          [(ngModel)]="blupDetails.floorAreaSqm"
+          (ngModelChange)="onFieldChange()"
+        />
+        <div class="gov-input__suffix" aria-hidden="true">sqm</div>
+      </div>
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('blupFloors')">
+      <label class="gov-label" for="blupFloors">Number of floors</label>
+      @if (hasError('blupFloors'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-5"
+        id="blupFloors"
+        type="number"
+        [(ngModel)]="blupDetails.numberOfFloors"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+    }
+
+    <!-- 3. Fire Safety Plan (FSP) -->
+    @if (selectedPermit?.permitName === 'Fire Safety Plan') {
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('fspBuildingType')">
+      <label class="gov-label" for="fspBuildingType">Building type</label>
+      @if (hasError('fspBuildingType'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="fspBuildingType"
+        type="text"
+        [(ngModel)]="fspDetails.buildingType"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('fspFloors')">
+      <label class="gov-label" for="fspFloors">Number of floors</label>
+      @if (hasError('fspFloors'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-5"
+        id="fspFloors"
+        type="number"
+        [(ngModel)]="fspDetails.numberOfFloors"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('fspAlarm')">
+      <label class="gov-label" for="fspAlarm">Alarm system type</label>
+      @if (hasError('fspAlarm'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="fspAlarm"
+        type="text"
+        [(ngModel)]="fspDetails.alarmSystemType"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('fspEngineer')">
+      <label class="gov-label" for="fspEngineer">Fire engineer name</label>
+      @if (hasError('fspEngineer'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="fspEngineer"
+        type="text"
+        [(ngModel)]="fspDetails.fireEngineerName"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+    }
+
+    <!-- 4. Fire Certificate -->
+    @if (selectedPermit?.permitName === 'Fire Certificate') {
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('fireAddress')">
+      <label class="gov-label" for="fireAddress">Premises address</label>
+      @if (hasError('fireAddress'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="fireAddress"
+        type="text"
+        [(ngModel)]="fireDetails.premisesAddress"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('fireOccupancy')">
+      <label class="gov-label" for="fireOccupancy">Occupancy load</label>
+      <div class="gov-hint">Maximum number of persons permitted on the premises</div>
+      @if (hasError('fireOccupancy'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-5"
+        id="fireOccupancy"
+        type="number"
+        [(ngModel)]="fireDetails.occupancyLoad"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('fireExtinguishers')">
+      <label class="gov-label" for="fireExtinguishers">Extinguisher count</label>
+      @if (hasError('fireExtinguishers'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-5"
+        id="fireExtinguishers"
+        type="number"
+        [(ngModel)]="fireDetails.extinguisherCount"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('fireExits')">
+      <label class="gov-label" for="fireExits">Emergency exits</label>
+      @if (hasError('fireExits'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-5"
+        id="fireExits"
+        type="number"
+        [(ngModel)]="fireDetails.emergencyExits"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('fireInspection')">
+      <label class="gov-label" for="fireInspection">Last inspection date</label>
+      @if (hasError('fireInspection'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-10"
+        id="fireInspection"
+        type="date"
+        [(ngModel)]="fireDetails.lastInspectionDate"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group">
+      <div class="gov-checkboxes__item">
+        <input
+          class="gov-checkboxes__input"
+          id="hasSprinkler"
+          type="checkbox"
+          [(ngModel)]="fireDetails.hasSprinklerSystem"
+          (ngModelChange)="onFieldChange()"
+        />
+        <label class="gov-checkboxes__label" for="hasSprinkler">
+          Premises has an installed sprinkler system
+        </label>
+      </div>
+    </div>
+    }
+
+    <!-- 5. Occupation Certificate -->
+    @if (selectedPermit?.permitName === 'Occupation Certificate') {
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('occBlupRef')">
+      <label class="gov-label" for="occBlupRef">BLUP reference number</label>
+      @if (hasError('occBlupRef'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-10"
+        id="occBlupRef"
+        type="text"
+        [(ngModel)]="occupationDetails.blupReferenceNumber"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('occCompletion')">
+      <label class="gov-label" for="occCompletion">Completion date</label>
+      @if (hasError('occCompletion'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-10"
+        id="occCompletion"
+        type="date"
+        [(ngModel)]="occupationDetails.completionDate"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('occArchitect')">
+      <label class="gov-label" for="occArchitect">Certified architect name</label>
+      @if (hasError('occArchitect'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="occArchitect"
+        type="text"
+        [(ngModel)]="occupationDetails.certifiedArchitectName"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+
+    <div class="gov-form-group" [class.gov-form-group--error]="hasError('occType')">
+      <label class="gov-label" for="occType">Intended occupancy type</label>
+      @if (hasError('occType'); as msg) {
+      <p class="gov-error-message">{{ msg }}</p>
+      }
+      <input
+        class="gov-input gov-input--width-20"
+        id="occType"
+        type="text"
+        [(ngModel)]="occupationDetails.intendedOccupancyType"
+        (ngModelChange)="onFieldChange()"
+      />
+    </div>
+    }
+
+    <!-- GOV.UK BUTTON GROUP -->
+    <div class="gov-button-group">
+      <button
+        type="button"
+        class="gov-button"
+        [disabled]="saving()"
+        (click)="saveApplication('Submitted')"
+      >
+        {{ saving() ? 'Submitting...' : 'Submit application' }}
+      </button>
+
+      <button
+        type="button"
+        class="gov-button gov-button--secondary"
+        [disabled]="saving()"
+        (click)="saveApplication('Draft')"
+      >
+        Save as draft
+      </button>
+    </div>
+  </div>
+  }
+</div>
