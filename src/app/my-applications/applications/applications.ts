@@ -1,27 +1,35 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApplicationService } from '../services/application';
+import { ApplicationService } from '../../services/application';
+import { AuthService } from '../../services/auth';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-applications',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './applications.html',
   styleUrl: './applications.css',
 })
 export class Applications implements OnInit {
-  // 1. Wrap applications in a signal
   applications = signal<any[]>([]);
-
   selectedStatus = 'Applications';
+  isAdmin = computed(() => this.authService.isAdmin());
 
-  constructor(private applicationService: ApplicationService) {}
+  constructor(
+    private applicationService: ApplicationService,
+    private authService: AuthService,
+  ) {}
 
   ngOnInit(): void {
+    const userId = this.authService.currentUser()?.userId;
+
     this.applicationService.getApplications().subscribe((data) => {
-      // 2. Use .set() instead of = so Angular knows to re-render
-      this.applications.set(data);
-      console.log(data);
+      if (this.isAdmin()) {
+        this.applications.set(data);
+      } else {
+        this.applications.set(data.filter((app) => app.applicant?.user?.userId === userId));
+      }
     });
   }
 

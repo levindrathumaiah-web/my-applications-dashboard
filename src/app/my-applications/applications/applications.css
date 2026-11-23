@@ -1,0 +1,173 @@
+
+.applications-container {
+  margin-top: 16px;
+}
+
+/* Filter bar (if used above the table) */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 7px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background-color: #ffffff;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-btn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.filter-btn.active {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+/* Table base */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: transparent;
+  font-size: 14px;
+}
+
+th,
+td {
+  padding: 14px 18px;
+  text-align: left;
+  border: 1px solid #e2e8f0;
+}
+
+/* Header styling (excluding the last View column) */
+th:not(:last-child) {
+  background-color: #eef5fc;
+  color: #0f172a;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
+}
+
+th:first-child {
+  border-left: 1px solid #e2e8f0;
+  border-top-left-radius: 10px;
+}
+
+th:nth-last-child(2) {
+  border-right: 1px solid #e2e8f0;
+  border-top-right-radius: 10px;
+}
+
+/* Body cells (excluding the last View column) */
+td:not(:last-child) {
+  background-color: #ffffff;
+  color: #1e293b;
+}
+
+td:first-child {
+  border-left: 1px solid #e2e8f0;
+}
+
+td:nth-last-child(2) {
+  border-right: 1px solid #e2e8f0;
+}
+
+/* Scheme / license colors (higher specificity so they override the white td background) */
+td.lcp,
+.lcp {
+  background-color: lightblue;
+}
+
+td.blup,
+.blup {
+  background-color: lightgreen;
+}
+
+td.fsp,
+.fsp {
+  background-color: khaki;
+}
+
+td.fire,
+.fire {
+  background-color: lightcoral;
+}
+
+td.occupation,
+.occupation {
+  background-color: plum;
+}
+
+/* Bottom rounded corners on the main table card */
+tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+tbody tr:last-child td:nth-last-child(2) {
+  border-bottom-right-radius: 10px;
+}
+
+tbody tr:hover td:not(:last-child):not(.lcp):not(.blup):not(.fsp):not(.fire):not(.occupation) {
+  background-color: #f8fafc;
+}
+
+/* Last ("View") column blended into the outer page background */
+th:last-child,
+td:last-child {
+  background-color: var(--background);
+  border: none;
+  padding-left: 16px;
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* Clean button-style "View" link */
+td:last-child a {
+  display: inline-block;
+  padding: 6px 14px;
+  background-color: #ffffff;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+td:last-child a:hover {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+/* Status badge styling (optional if used inside status <td>) */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.empty-state {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 32px;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+}
