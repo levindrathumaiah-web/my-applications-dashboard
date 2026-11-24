@@ -33,7 +33,11 @@
     <div class="form-grid">
       <div class="field-group">
         <label>Applicant Name</label>
-        <input type="text" [value]="app.applicant?.applicantName || '—'" disabled />
+        <input
+          type="text"
+          [value]="((app.applicant?.firstName || '') + ' ' + (app.applicant?.lastName || '')).trim() || '—'"
+          disabled
+        />
       </div>
 
       <div class="field-group">
@@ -50,6 +54,10 @@
         <label>BRN</label>
         <input type="text" [value]="app.applicant?.company?.brn || '—'" disabled />
       </div>
+    </div>
+    <div class="field-group">
+      <label class="gov-label">Correspondence address</label>
+      <input type="text" class="gov-input" [value]="app.applicant?.address || '—'" disabled />
     </div>
 
     <hr class="divider" />
@@ -180,6 +188,71 @@
       </div>
     </div>
     }
+    <div class="view-actions">
+      <a routerLink="/my-applications/applications" class="gov-btn-secondary">
+        Back to Applications
+      </a>
+
+      @if (canDelete) {
+      <button
+        type="button"
+        class="gov-btn-danger"
+        (click)="openDeleteModal()"
+      >
+        Delete Application
+      </button>
+      }
+    </div>
+
+    @if (showDeleteModal()) {
+    <div class="modal-backdrop" (click)="closeDeleteModal()">
+      <div
+        class="modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="delete-modal-title"
+        (click)="$event.stopPropagation()"
+      >
+        <h2 id="delete-modal-title" class="modal-title">Are you sure?</h2>
+        <p class="modal-body">
+          This will permanently delete application
+          <strong>{{ application()?.applicationNo }}</strong>. This action cannot be undone.
+        </p>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="gov-btn-secondary"
+            [disabled]="deleting()"
+            (click)="closeDeleteModal()"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="gov-btn-danger-fill"
+            [class.is-ready]="deleteReady()"
+            [disabled]="!deleteReady() || deleting()"
+            (click)="confirmDelete()"
+          >
+            <span class="fill-bar"></span>
+            <span class="btn-label">
+            @if (deleting()) {
+              Deleting...
+            } @else if (!deleteReady()) {
+              Delete ({{ countdown() }}s)
+            } @else {
+              Delete Application
+            }
+          </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    }
   </div>
   }
+
 </div>
+

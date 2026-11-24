@@ -2,11 +2,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .section-heading h2 {
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 650;
   color: var(--dark);
 }
@@ -15,13 +15,13 @@
   display: flex;
   gap: 8px;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 24px;
+  margin-bottom: 10px;
 }
 
 .sub-nav a {
   text-decoration: none;
   color: var(--grey);
-  padding: 12px 17px;
+  padding: 9px 15px;
   font-size: 14px;
   font-weight: 500;
   transition: 0.2s;
@@ -34,11 +34,11 @@
   border-bottom: 3px solid var(--primary);
 }
 
-/* BLUE BANNER (REUSING HER .hero STYLE) */
+/* COMPACT BLUE BANNER (HIDDEN ON NEW/EDIT FORM ROUTES) */
 .hero {
   background: linear-gradient(120deg, #104c80, #2186c7);
   border-radius: 14px 14px 0 0;
-  padding: 40px 45px;
+  padding: 0.75rem 1.5rem;
   color: white;
   position: relative;
   overflow: hidden;
@@ -52,32 +52,21 @@
 .hero::after {
   content: "";
   position: absolute;
-  width: 300px;
-  height: 300px;
-  border: 45px solid rgba(255, 255, 255, 0.08);
+  width: 240px;
+  height: 240px;
+  border: 36px solid rgba(255, 255, 255, 0.08);
   border-radius: 50%;
-  right: -80px;
-  top: -100px;
+  right: -60px;
+  top: -90px;
 }
 
-.hero .breadcrumb {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: #cfe6fa;
-  margin-bottom: 10px;
+.hero .breadcrumb,
+.hero p {
+  display: none;
 }
 
 .hero h2 {
-  font-size: 30px;
+  font-size: 22px;
   font-weight: 650;
-  margin-bottom: 8px;
-}
-
-.hero p {
-  font-size: 14px;
-  color: #e2f0fc;
   margin: 0;
 }

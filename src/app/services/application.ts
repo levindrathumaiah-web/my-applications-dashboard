@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -36,4 +37,8 @@ export class ApplicationService {
   getApplicantsByUser(userId: number) {
     return this.http.get<any[]>(`${this.apiUrl}/applicants/user/${userId}`);
   }
+  updateApplicationStatus(applicationId: number, statusName: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${applicationId}/status`, { statusName });
+  }
+
 }

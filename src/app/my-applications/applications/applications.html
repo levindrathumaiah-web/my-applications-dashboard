@@ -1,6 +1,56 @@
 <div class="section-heading">
   <h3>{{ isAdmin() ? 'All Applications' : 'Applications' }}</h3>
 </div>
+<div class="filter-bar" role="search" aria-label="Filter applications">
+  <label>Application no.
+    <input
+      type="text"
+      list="appNoOptions"
+      [value]="searchAppNo()"
+      (input)="searchAppNo.set($any($event.target).value)"
+      placeholder="All or type e.g. APP-001"
+    />
+    <datalist id="appNoOptions">
+      <option *ngFor="let no of availableAppNos()" [value]="no"></option>
+    </datalist>
+  </label>
+
+  <label>Applicant name
+    <input
+      type="text"
+      list="applicantNameOptions"
+      [value]="searchApplicant()"
+      (input)="searchApplicant.set($any($event.target).value)"
+      placeholder="All or type name"
+    />
+    <datalist id="applicantNameOptions">
+      <option *ngFor="let name of availableApplicantNames()" [value]="name"></option>
+    </datalist>
+  </label>
+
+  <label>Status
+    <select [value]="selectedStatus()" (change)="selectedStatus.set($any($event.target).value)">
+      <option value="All">All statuses</option>
+      <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+    </select>
+  </label>
+
+  <label>Permit type
+    <select [value]="selectedPermit()" (change)="selectedPermit.set($any($event.target).value)">
+      <option value="All">All permit types</option>
+      <option *ngFor="let permit of permitTypes" [value]="permit">{{ permit }}</option>
+    </select>
+  </label>
+
+  <label>Transaction
+    <select [value]="selectedTransaction()" (change)="selectedTransaction.set($any($event.target).value)">
+      <option value="All">All transactions</option>
+      <option *ngFor="let transaction of transactionTypes" [value]="transaction">{{ transaction }}</option>
+    </select>
+  </label>
+
+  <button class="clear-filters-button" type="button" (click)="clearFilters()">Clear filters</button>
+</div>
 <div class="table-card">
   <table>
     <thead>
@@ -29,8 +79,24 @@
       </td>
 
       <td>{{ app.transactionType?.transactionType }}</td>
-      <td>{{ app.applicant?.applicantName }}</td>
-      <td>{{ app.status?.statusName }}</td>
+      <td>{{ app.applicant?.firstName }} {{ app.applicant?.lastName }}</td>
+      <td><ng-container *ngIf="isAdmin(); else readOnlyStatus">
+        <select
+          class="status-select"
+          [value]="app.status?.statusName"
+          [disabled]="updatingId() === (app.applicationId || app.id)"
+          (change)="changeStatus(app, $any($event.target).value)"
+          aria-label="Change application status"
+        >
+          <option *ngFor="let status of statuses" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+      </ng-container>
+        <ng-template #readOnlyStatus>
+          {{ app.status?.statusName }}
+        </ng-template>
+      </td>
       <td>{{ app.createdDate }}</td>
       <td>
         <a [routerLink]="['/my-applications/applications', app.applicationId || app.id]">

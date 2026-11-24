@@ -16,8 +16,14 @@ public class Applicant {
   @Column(name = "applicantId")
   private Integer applicantId;
 
-  @Column(name = "applicantName")
-  private String applicantName;
+  @Column(name = "firstName", length = 100)
+  private String firstName;
+
+  @Column(name = "lastName", length = 100)
+  private String lastName;
+
+  @Column(name = "address", length = 255)
+  private String address;
 
   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "companyId")

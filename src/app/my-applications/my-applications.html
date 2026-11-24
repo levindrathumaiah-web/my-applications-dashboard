@@ -1,9 +1,9 @@
+@if (!isFormRoute()) {
 <section class="hero">
-  <span class="breadcrumb">YOUR AREA / APPLICATIONS</span>
   <h2>{{ isAdmin() ? 'All Applications' : 'My Applications' }}</h2>
-  <p>{{ isAdmin() ? 'Review all submitted permit applications.' : 'View your applications and saved drafts.' }}</p>
 </section>
-
+}
+@if (!isFormRoute()) {
 <nav class="sub-nav">
   <a
     routerLink="/my-applications/applications"
@@ -28,5 +28,5 @@
   </a>
   }
 </nav>
-
+}
 <router-outlet></router-outlet>

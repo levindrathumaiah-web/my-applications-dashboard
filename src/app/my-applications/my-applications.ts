@@ -14,6 +14,7 @@ import { AuthService } from '../services/auth';
 })
 export class MyApplications implements OnInit {
   private destroyRef = inject(DestroyRef);
+  isFormRoute = signal<boolean>(false);
 
   applicationsCount = signal<number>(0);
   draftsCount = signal<number>(0);
@@ -27,13 +28,21 @@ export class MyApplications implements OnInit {
 
   ngOnInit(): void {
     this.refreshCounts();
+    this.checkRoute(this.router.url);
 
     this.router.events
       .pipe(
-        filter((event) => event instanceof NavigationEnd),
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(() => this.refreshCounts());
+      .subscribe((event) => {
+        this.refreshCounts();
+        this.checkRoute(event.urlAfterRedirects);
+      });
+  }
+
+  private checkRoute(url: string): void {
+    this.isFormRoute.set(url.includes('/new') || url.includes('/edit'));
   }
 
   refreshCounts(): void {
@@ -52,4 +61,3 @@ export class MyApplications implements OnInit {
     });
   }
 }
-

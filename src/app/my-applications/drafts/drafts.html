@@ -1,6 +1,51 @@
 <div class="section-heading">
   <h3>Drafts</h3>
 </div>
+
+<div class="filter-bar" role="search" aria-label="Filter drafts">
+  <label>Application no.
+    <input
+      type="text"
+      list="draftAppNoOptions"
+      [value]="searchAppNo()"
+      (input)="searchAppNo.set($any($event.target).value)"
+      placeholder="All or type e.g. APP-001"
+    />
+    <datalist id="draftAppNoOptions">
+      <option *ngFor="let no of availableAppNos()" [value]="no"></option>
+    </datalist>
+  </label>
+
+  <label>Applicant name
+    <input
+      type="text"
+      list="draftApplicantNameOptions"
+      [value]="searchApplicant()"
+      (input)="searchApplicant.set($any($event.target).value)"
+      placeholder="All or type name"
+    />
+    <datalist id="draftApplicantNameOptions">
+      <option *ngFor="let name of availableApplicantNames()" [value]="name"></option>
+    </datalist>
+  </label>
+
+  <label>Permit type
+    <select [value]="selectedPermit()" (change)="selectedPermit.set($any($event.target).value)">
+      <option value="All">All permit types</option>
+      <option *ngFor="let permit of permitTypes" [value]="permit">{{ permit }}</option>
+    </select>
+  </label>
+
+  <label>Transaction
+    <select [value]="selectedTransaction()" (change)="selectedTransaction.set($any($event.target).value)">
+      <option value="All">All transactions</option>
+      <option *ngFor="let transaction of transactionTypes" [value]="transaction">{{ transaction }}</option>
+    </select>
+  </label>
+
+  <button class="clear-filters-button" type="button" (click)="clearFilters()">Clear filters</button>
+</div>
+
 <div class="table-card">
   <table>
     <thead>
@@ -9,34 +54,40 @@
       <th>Permit Type</th>
       <th>Transaction Type</th>
       <th>Applicant Name</th>
-      <th>Status</th>
       <th>Created Date</th>
       <th>Actions</th>
     </tr>
     </thead>
-
     <tbody>
-    <tr *ngFor="let app of applications()">
+    <tr *ngFor="let app of filteredDrafts()">
       <td>{{ app.applicationNo }}</td>
+
       <td [ngClass]="{
-        'lcp': app.permit?.permitName === 'Land Conversion Permit',
-        'blup': app.permit?.permitName === 'Building and Land Use Permit',
-        'fsp': app.permit?.permitName === 'Fire Safety Plan',
-        'fire': app.permit?.permitName === 'Fire Certificate',
-        'occupation': app.permit?.permitName === 'Occupation Certificate'
-      }">
+          'lcp': app.permit?.permitName === 'Land Conversion Permit',
+          'blup': app.permit?.permitName === 'Building and Land Use Permit',
+          'fsp': app.permit?.permitName === 'Fire Safety Plan',
+          'fire': app.permit?.permitName === 'Fire Certificate',
+          'occupation': app.permit?.permitName === 'Occupation Certificate'
+        }">
         {{ app.permit?.permitName }}
       </td>
+
       <td>{{ app.transactionType?.transactionType }}</td>
-      <td>{{ app.applicant?.applicantName }}</td>
-      <td>{{ app.status?.statusName }}</td>
+      <td>{{ app.applicant?.firstName }} {{ app.applicant?.lastName }}</td>
       <td>{{ app.createdDate }}</td>
-      <td>
-        <a [routerLink]="['/my-applications/drafts', app.applicationId, 'edit']">Edit</a>
-        <button type="button" (click)="deleteDraft(app.applicationId)">Delete</button>
+      <td class="draft-actions">
+        <a class="continue-link" [routerLink]="['/my-applications/drafts', app.applicationId || app.id, 'edit']">
+          Edit
+        </a>
+        <button class="delete-draft-button" type="button" (click)="deleteDraft(app.applicationId || app.id)">
+          Delete
+        </button>
       </td>
+    </tr>
+
+    <tr *ngIf="filteredDrafts().length === 0">
+      <td colspan="6" class="empty-row">No draft applications match the selected filters.</td>
     </tr>
     </tbody>
   </table>
 </div>
-

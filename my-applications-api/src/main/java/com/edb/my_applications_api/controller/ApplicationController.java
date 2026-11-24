@@ -2,13 +2,15 @@ package com.edb.my_applications_api.controller;
 
 import com.edb.my_applications_api.entity.*;
 import com.edb.my_applications_api.repository.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/applications")
@@ -80,13 +82,51 @@ public class ApplicationController {
       .orElse(ResponseEntity.notFound().build());
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteApplication(@PathVariable Integer id) {
-    if (!applicationRepository.existsById(id)) {
-      return ResponseEntity.notFound().build();
+  @PatchMapping("/{id}/status")
+  @Transactional
+  public ResponseEntity<?> updateApplicationStatus(
+    @PathVariable Integer id,
+    @RequestBody Map<String, String> payload
+  ) {
+    String newStatusName = payload.get("statusName") != null ? payload.get("statusName").trim() : "";
+    if (newStatusName.isEmpty()) {
+      return ResponseEntity.badRequest().body(Map.of("message", "Status name is required."));
     }
-    applicationRepository.deleteById(id);
-    return ResponseEntity.noContent().build();
+
+    Optional<Application> appOpt = applicationRepository.findById(id);
+    if (appOpt.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Application not found."));
+    }
+
+    Status status = statusRepository.findAll().stream()
+      .filter(s -> s.getStatusName() != null && s.getStatusName().equalsIgnoreCase(newStatusName))
+      .findFirst()
+      .orElseGet(() -> {
+        Status created = new Status();
+        created.setStatusName(newStatusName);
+        return statusRepository.save(created);
+      });
+
+    Application app = appOpt.get();
+    app.setStatus(status);
+    Application updated = applicationRepository.save(app);
+
+    return ResponseEntity.ok(updated);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> deleteApplication(@PathVariable Integer id) {
+    return applicationRepository.findById(id)
+      .map(app -> {
+        String status = app.getStatus() != null ? app.getStatus().getStatusName() : "";
+        if (!"Draft".equalsIgnoreCase(status) && !"Submitted".equalsIgnoreCase(status)) {
+          return ResponseEntity.badRequest()
+            .body("Only Draft or Submitted applications can be deleted.");
+        }
+        applicationRepository.delete(app);
+        return ResponseEntity.noContent().build();
+      })
+      .orElse(ResponseEntity.notFound().build());
   }
 
   private void populateApplicationFields(Application target, Application source) {
@@ -101,8 +141,14 @@ public class ApplicationController {
         resolved = new Applicant();
       }
 
-      if (incoming.getApplicantName() != null && !incoming.getApplicantName().isBlank()) {
-        resolved.setApplicantName(incoming.getApplicantName().trim());
+      if (incoming.getFirstName() != null) {
+        resolved.setFirstName(incoming.getFirstName().trim());
+      }
+      if (incoming.getLastName() != null) {
+        resolved.setLastName(incoming.getLastName().trim());
+      }
+      if (incoming.getAddress() != null) {
+        resolved.setAddress(incoming.getAddress().trim());
       }
 
       if (incoming.getUser() != null && incoming.getUser().getUserId() != null) {
@@ -117,7 +163,7 @@ public class ApplicationController {
         company.setCompanyName(incoming.getCompany().getCompanyName().trim());
         company.setBrn(incoming.getCompany().getBrn() != null ? incoming.getCompany().getBrn().trim() : null);
         resolved.setCompany(company);
-      } else if (incoming.getApplicantId() == null) {
+      } else {
         resolved.setCompany(null);
       }
 
@@ -203,7 +249,11 @@ public class ApplicationController {
   }
 
   private String generateApplicationNo() {
-    String suffix = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
-    return "EDB-" + Year.now().getValue() + "-" + suffix;
+    String maxAppNo = applicationRepository.findMaxSequentialAppNo();
+    int nextNum = 1;
+    if (maxAppNo != null && maxAppNo.startsWith("APP-")) {
+      nextNum = Integer.parseInt(maxAppNo.substring(4)) + 1;
+    }
+    return String.format("APP-%03d", nextNum);
   }
 }

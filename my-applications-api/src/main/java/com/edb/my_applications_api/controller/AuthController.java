@@ -1,16 +1,14 @@
 package com.edb.my_applications_api.controller;
 
-import com.edb.my_applications_api.entity.Applicant;
 import com.edb.my_applications_api.entity.User;
-import com.edb.my_applications_api.repository.ApplicantRepository;
 import com.edb.my_applications_api.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.HashMap;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -20,11 +18,9 @@ import java.util.Optional;
 public class AuthController {
 
   private final UserRepository userRepository;
-  private final ApplicantRepository applicantRepository;
 
-  public AuthController(UserRepository userRepository, ApplicantRepository applicantRepository) {
+  public AuthController(UserRepository userRepository) {
     this.userRepository = userRepository;
-    this.applicantRepository = applicantRepository;
   }
 
   @PostMapping("/login")
@@ -86,13 +82,6 @@ public class AuthController {
     newUser.setPasswordHash(password);
 
     User savedUser = userRepository.save(newUser);
-
-    // Auto-create initial personal Applicant profile for this user
-    Applicant personalApplicant = new Applicant();
-    personalApplicant.setApplicantName(firstName + " " + lastName);
-    personalApplicant.setUser(savedUser);
-    personalApplicant.setCompany(null);
-    applicantRepository.save(personalApplicant);
 
     Map<String, Object> response = new HashMap<>();
     response.put("userId", savedUser.getUserId());
